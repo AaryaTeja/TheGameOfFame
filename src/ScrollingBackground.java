@@ -1,12 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.ImageObserver;
+
 import javax.swing.*;
 
 public class ScrollingBackground extends JPanel implements ActionListener, KeyListener{
 	protected Image bg;
 	private Image player, plWalk;
-
-	private int facing;
 
 	private Timer walkFrameTM;
 	private int walkFrame;
@@ -26,7 +26,6 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		return new Dimension(bg.getWidth(null), bg.getHeight(null));
 	}
 
-
 	public ScrollingBackground(){
 		addKeyListener(this);
 
@@ -39,6 +38,10 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		ImageIcon shWalk = new ImageIcon("src/animation/shaman/Walk.png");
 		plWalk = shWalk.getImage();
 		walkFrame = 0;
+		
+		
+		// TODO FINISH THE PATH AND EDIT BELOW CODE FOR DECIDING WHETHER TO BE IDLE
+		ImageIcon shIdle = new ImageIcon("src/animation");
 
 		// initializing
 		bgX = 0;
@@ -55,12 +58,16 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		gravityTM = new Timer(10, this);
 		gravityTM.start();
 
-		facing = 1;
-
 		walkFrameTM = new Timer(100, this);
 		walkFrameTM.start();
 		
 		requestFocusInWindow();
+	}
+	
+	public void drawImage(Graphics2D g2d, Image img,
+            int dx1, int dy1, int dx2, int dy2,
+            int sx1, int sy1, int sx2, int sy2) {
+		g2d.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
 	}
 
 	public void paintComponent(Graphics g){
@@ -74,16 +81,21 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		} else if (bgX >= bg.getWidth(null)){
 			bgX = 0;
 		}
-		// face right(1) if no key is pressed
-//		if (kright || kleft) {
-			if (facing == 1){
-				g2d.drawImage(plWalk, (int)plx, (int)ply, (int)plx + 64, (int)ply + 128, (walkFrame*96)+32, 32, (walkFrame*96)+64, 96, null);
-			} else if (facing == -1) {
-				g2d.drawImage(plWalk, (int)plx + 64, (int)ply,(int)plx, (int)ply + 128,(walkFrame*96)+32, 32,(walkFrame*96)+64, 96,null);
+		
+		// decide wether to walk or idle
+		if (kright || kleft) {
+			if (plxvel > 1){
+				drawImage(g2d, plWalk,
+						(int)plx, (int)ply, (int)plx + 64, (int)ply + 128,
+						(walkFrame*96)+32, 32, (walkFrame*96)+64, 96);
+			} else if (plxvel < 1) {
+				drawImage(g2d, plWalk,
+						(int)plx + 64, (int)ply, (int)plx, (int)ply + 128,
+						(walkFrame*96)+32, 32, (walkFrame*96)+64, 96);
 			}
-//		} else {
-//			g2d.drawImage(plWalk, (int)plx, (int)ply, (int)plx + 64, (int)ply + 128, (walkFrame*96)+32, 32, (walkFrame*96)+64, 96, null);
-//		}
+		} else {
+			drawImage(g2d, );
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -153,10 +165,8 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_LEFT){
 			kleft = true;
-			facing = -1;
 		} if (e.getKeyCode() == KeyEvent.VK_RIGHT){
 			kright = true;
-			facing = 1;
 		} if (e.getKeyCode() == KeyEvent.VK_UP){
 			kup = true;
 		}
