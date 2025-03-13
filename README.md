@@ -25,8 +25,8 @@ The map contains various obstacles that challenge the players' ability to reach 
 
 ## The Learning Mechanic: Basic Addition
 To make the game educational, we've integrated basic single-digit addition into an important mechanic:
-- **Unlocking Fame Points:** When a player reaches the target, they must solve a simple addition problem (e.g., `7 + 2 = ?`) to claim the Fame Point.
-- **Teleporters & Speed Boosts:** Some teleporters and speed boosts are locked behind addition problems that must be answered correctly before they can be used.
+- **Unlocking Fame Points:** When a player reaches the target, they must solve multiple simple addition problems (e.g., `7 + 2 = ?`) to claim the Fame Point.
+- **Teleporters & Speed Boosts:** Some teleporters and speed boosts are locked behind timed addition problems that must be answered correctly before they can be used.
 - **Penalty for Mistakes:** Incorrect answers impose a short delay before retrying, making quick math skills advantageous!
 
 ## Winning the Game
@@ -36,3 +36,6 @@ The game ends when the timer reaches zero. The player with the most Fame Points 
 We created this project as part of our Java coursework, aiming to combine an engaging multiplayer experience with an educational component. By integrating simple addition into key mechanics, we ensure that learning remains a natural part of the game without disrupting the fun.
 
 Get ready to race, outmaneuver, and outthink your opponent in **The Game of Fame**!
+
+# A Picture Of Thomas Jefferson
+![A Picture of Thomas Jefferson](https://upload.wikimedia.org/wikipedia/commons/0/07/Official_Presidential_portrait_of_Thomas_Jefferson_%28by_Rembrandt_Peale%2C_1800%29.jpg)
