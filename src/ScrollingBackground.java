@@ -91,10 +91,10 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		if (ply + player.getHeight(null) < floor){
 			drawImage(g2d, plJump,
 					(int) plx - 32, (int) ply, (int) plx + 96, (int) ply + 160,
-					kleft?288:192, 0, kleft?192:288, 96);
+					(plxvel<0)?288:192, 0, (plxvel<0)?192:288, 96);
 		}
 		else {
-			if (kright || kleft) {
+			if (plxvel != 0) {
 				if (plxvel > 1) {
 					drawImage(g2d, plWalk,
 							(int) plx, (int) ply, (int) plx + 64, (int) ply + 128,
