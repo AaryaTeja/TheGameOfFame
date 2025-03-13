@@ -16,6 +16,7 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 	private double plyvel, plxvel, ply, plx, bgX;
 
 	private boolean kleft, kright, kup;
+	private boolean doubleJump;
 
 	// constants
 	private double gravity;
@@ -55,6 +56,7 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		ply = floor - player.getHeight(null);
 		plyvel = 0;
 		plxvel = 0;
+		doubleJump = true;
 
 		gameTM = new Timer(5, this);
 		gameTM.start();
@@ -89,7 +91,7 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		if (ply + player.getHeight(null) < floor){
 			drawImage(g2d, plJump,
 					(int) plx - 32, (int) ply, (int) plx + 96, (int) ply + 160,
-					192, 0, 288, 96);
+					kleft?288:192, 0, kleft?192:288, 96);
 		}
 		else {
 			if (kright || kleft) {
