@@ -138,11 +138,16 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
             }
 
             // Handle jump and double jump
-            if (kup && ply >= floor - player.getHeight(null)) {
-                plyvel = -20;
-            } else if (kup && doubleJump) {
-                doubleJump = false;
-                plyvel = -20;
+            if (kup) {
+            	System.out.println("1:" + doubleJump);
+                if (ply + player.getHeight(null) >= floor) { 
+                    plyvel = -20;  // Regular jump
+                    doubleJump = true;
+                } else if (doubleJump) {
+                    plyvel = -20;  // Double jump
+                    doubleJump = false;
+                }
+            	System.out.println("2:" + doubleJump);
             }
 
             // Update player position
