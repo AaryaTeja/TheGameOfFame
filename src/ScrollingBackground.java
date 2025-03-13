@@ -6,10 +6,10 @@ import javax.swing.*;
 
 public class ScrollingBackground extends JPanel implements ActionListener, KeyListener{
 	protected Image bg;
-	private Image player, plWalk;
+	private Image player, plWalk, plIdle, plJump;
 
-	private Timer walkFrameTM;
-	private int walkFrame;
+	private Timer animationTM;
+	private int walkFrame, idleFrame;
 
 
 	private Timer gameTM, gravityTM;
@@ -38,10 +38,13 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		ImageIcon shWalk = new ImageIcon("src/animation/shaman/Walk.png");
 		plWalk = shWalk.getImage();
 		walkFrame = 0;
-		
-		
-		// TODO FINISH THE PATH AND EDIT BELOW CODE FOR DECIDING WHETHER TO BE IDLE
-		ImageIcon shIdle = new ImageIcon("src/animation");
+
+		ImageIcon shIdle = new ImageIcon("src/animation/shaman/idle.png");
+		plIdle = shIdle.getImage();
+		idleFrame = 0;
+
+		ImageIcon shJump = new ImageIcon("src/animation/shaman/jump.png");
+		plJump = shJump.getImage();
 
 		// initializing
 		bgX = 0;
@@ -58,8 +61,8 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		gravityTM = new Timer(10, this);
 		gravityTM.start();
 
-		walkFrameTM = new Timer(100, this);
-		walkFrameTM.start();
+		animationTM = new Timer(100, this);
+		animationTM.start();
 		
 		requestFocusInWindow();
 	}
@@ -83,18 +86,27 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 		}
 		
 		// decide wether to walk or idle
-		if (kright || kleft) {
-			if (plxvel > 1){
-				drawImage(g2d, plWalk,
-						(int)plx, (int)ply, (int)plx + 64, (int)ply + 128,
-						(walkFrame*96)+32, 32, (walkFrame*96)+64, 96);
-			} else if (plxvel < 1) {
-				drawImage(g2d, plWalk,
-						(int)plx + 64, (int)ply, (int)plx, (int)ply + 128,
-						(walkFrame*96)+32, 32, (walkFrame*96)+64, 96);
+		if (ply + player.getHeight(null) < floor){
+			drawImage(g2d, plJump,
+					(int) plx - 32, (int) ply, (int) plx + 96, (int) ply + 160,
+					192, 0, 288, 96);
+		}
+		else {
+			if (kright || kleft) {
+				if (plxvel > 1) {
+					drawImage(g2d, plWalk,
+							(int) plx, (int) ply, (int) plx + 64, (int) ply + 128,
+							(walkFrame * 96) + 32, 32, (walkFrame * 96) + 64, 96);
+				} else if (plxvel < 1) {
+					drawImage(g2d, plWalk,
+							(int) plx + 64, (int) ply, (int) plx, (int) ply + 128,
+							(walkFrame * 96) + 32, 32, (walkFrame * 96) + 64, 96);
+				}
+			} else {
+				drawImage(g2d, plIdle,
+						(int) plx, (int) ply, (int) plx + 76, (int) ply + 128,
+						(idleFrame * 96) + 32, 32, (idleFrame * 96) + 76, 96);
 			}
-		} else {
-			drawImage(g2d, );
 		}
 	}
 
@@ -117,7 +129,7 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 			}
 
 			if (kup && ply >= floor - player.getHeight(null)) {
-				plyvel = -15;
+				plyvel = -20;
 			}
 
 			plx += plxvel;
@@ -148,10 +160,12 @@ public class ScrollingBackground extends JPanel implements ActionListener, KeyLi
 			}
 
 			plyvel += gravity;
-		} else if (e.getSource() == walkFrameTM) {
-			walkFrame++;
-			if (walkFrame > 6) {
+		} else if (e.getSource() == animationTM) {
+			if (++walkFrame > 6){
 				walkFrame = 0;
+			}
+			if (++idleFrame > 4){
+				idleFrame = 0;
 			}
 		}
 
