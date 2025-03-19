@@ -3,7 +3,6 @@
 ## Graphics Needed:
 - Player1.png
 - Player2.png
-- Background.png
 - Floor.png
 - Zombie.png
 
