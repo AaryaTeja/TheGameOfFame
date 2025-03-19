@@ -6,6 +6,7 @@
 - Background.png
 - Floor.png
 - Zombie.png
+
 **Dimentions Of The Window:** 1440x900
 
 ## Overview
