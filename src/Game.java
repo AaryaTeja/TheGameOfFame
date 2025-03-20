@@ -15,13 +15,13 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 	private Timer gameTM, gameStartTM;
 	private Image player1Image, player2Image;
 	
-	private int player1Width = player1Image.getWidth(null);
-	private int player1Height = player1Image.getHeight(null);
-	private int player1Size = 2;
+	private int player1Width;
+	private int player1Height;
+	private int player1Size;
 
-	private int player2Width = player2Image.getWidth(null);
-	private int player2Height = player2Image.getHeight(null);
-	private int player2Size = 2;
+	private int player2Width;
+	private int player2Height;
+	private int player2Size;
 
 	public Game() {
 
@@ -42,6 +42,15 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 		pl1X = 125;
 		pl2X = 675;
 		pl1Y = pl2Y = floor;
+		
+
+		player1Width = this.player1Image.getWidth(null);
+		player1Height = this.player1Image.getHeight(null);
+		player1Size = 2;
+
+		player2Width = this.player2Image.getWidth(null);
+		player2Height = this.player2Image.getHeight(null);
+		player2Size = 2;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -108,6 +117,9 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == gameTM) {
+			
+			floor = 9 * getHeight() / 10;
+			
 			requestFocusInWindow();
 
 			double jumpHeight = -20;
@@ -134,10 +146,10 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 				pl1Y = floor;
 			}
 
-			if (pl1X >= getWidth()) {
-				pl1X = getWidth();
-			} else if (pl1X <= 0) {
-				pl1X = 0;
+			if (pl1X + player1Width/2/player1Size >= getWidth()) {
+				pl1X = getWidth() - player1Width/2/player1Size;
+			} else if (pl1X - player1Width/2/player1Size <= 0) {
+				pl1X = player1Width/2/player1Size;
 			}
 
 			// All of player two's code(↑←→↓)
@@ -164,9 +176,9 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 			}
 
 			if (pl2X + player2Width/2/player2Size >= getWidth()) {
-				pl2X = getWidth();
+				pl2X = getWidth() - player2Width/2/player2Size;
 			} else if (pl2X - player2Width/2/player2Size <= 0) {
-				pl2X = 0;
+				pl2X = player2Width/2/player2Size;
 			}
 
 
@@ -181,7 +193,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 		JFrame f = new JFrame("Game");
 
 		gameTM = new Timer(10, this);
-		gameStartTM = new Timer(1000, this);
+		gameStartTM = new Timer(500, this);
 		
 		gameStartTM.start();
 
