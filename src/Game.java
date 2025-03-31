@@ -32,7 +32,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         ImageIcon player2Image = new ImageIcon("src/player2.png");
         this.player2Image = player2Image.getImage();
 
-        ImageIcon backgroundIcon = new ImageIcon("src/Background.png");
+        ImageIcon backgroundIcon = new ImageIcon("src/GameBackground.png");
         this.backgroundImage = backgroundIcon.getImage();
 
         gameX = gameY = pl1XVel = pl1YVel = pl2XVel = pl2YVel = 0;
