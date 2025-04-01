@@ -24,8 +24,18 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private int player2Width;
     private int player2Height;
     private int player2Size;
+    
+    private Block[][] blocks;
 
     public Game() {
+    	blocks = new Block[60][32];
+    	
+    	for (int i = 0; i < blocks.length; i++) {
+    		for (int j = 0; j < blocks[i].length; j++) {
+    			blocks[i][j] = new Block(i, j);
+    		}
+    	}
+    	
         ImageIcon player1Image = new ImageIcon("src/player1.png");
         this.player1Image = player1Image.getImage();
 
@@ -37,10 +47,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         gameX = gameY = pl1XVel = pl1YVel = pl2XVel = pl2YVel = 0;
 
-        gameWidth = 800;
-        gameHeight = 600;
-
-        floor = 500;
+        floor = 768;
 
         pl1X = 125;
         pl2X = 675;
@@ -48,17 +55,17 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         player1Width = this.player1Image.getWidth(null);
         player1Height = this.player1Image.getHeight(null);
-        player1Size = 2;
+        player1Size = 4;
 
         player2Width = this.player2Image.getWidth(null);
         player2Height = this.player2Image.getHeight(null);
-        player2Size = 2;
+        player2Size = 4;
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(backgroundImage, 0, 0, backgroundImage.getWidth(null), backgroundImage.getHeight(null), null);
 
         g.drawImage(player1Image, (int) pl1X - (player1Width / player1Size / 2),
                 (int) pl1Y - (player1Height / player1Size), player1Image.getWidth(null) / player1Size,
@@ -67,6 +74,18 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         g.drawImage(player2Image, (int) pl2X - (player2Width / player2Size / 2),
                 (int) pl2Y - (player2Height / player2Size), player2Image.getWidth(null) / player2Size,
                 player2Image.getHeight(null) / player2Size, null);
+        
+        for (int i = 0; i < blocks.length; i++) {
+    		for (int j = 0; j < blocks[i].length; j++) {
+    			Image image = blocks[i][j].getImage();
+    			if (image != null) {
+    				int row = blocks[i][j].getRow();
+    				int column = blocks[i][j].getColumn();
+    				
+    				g.drawImage(image, row*24, column*24, (row*24)+24, (column*24)+24, 0, 0, 8, 8, null);
+    			}
+    		}
+    	}
     }
 
     public void keyTyped(KeyEvent e) {
@@ -116,8 +135,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == gameTM) {
-            floor = 9 * getHeight() / 10;
-
             requestFocusInWindow();
 
             double jumpHeight = -20;
@@ -151,6 +168,12 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             } else if (pl1X - player1Width / 2 / player1Size <= 0) {
                 pl1X = player1Width / 2 / player1Size;
             }
+            
+            if (ks && pl1Y > floor-24) {
+            	// TODO MAKE FLOOR AND CEIL WORK(THERE IS ERROR WHEN UNCOMMENTED)
+//            	int row = (pl1X / 24).floor();
+//            	int column = (pl1Y / 24).ceiling();
+            }
 
             // All of player two's code(↑←→↓)
             if (kup && pl2Y >= floor) {
@@ -167,8 +190,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
             pl2X += pl2XVel;
             pl2Y += pl2YVel;
-
-            System.out.println(pl2X);
 
             if (pl2Y < floor) {
                 pl2YVel += 1;
@@ -209,6 +230,12 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         f.setUndecorated(true);
         gfxDev.setFullScreenWindow(f);
         f.setVisible(true);
+
+        gameWidth = getWidth();
+        gameHeight = getHeight();
+        
+        System.out.println(gameWidth);
+        System.out.println(gameHeight);
     }
 
     public static void main(String[] args) {
