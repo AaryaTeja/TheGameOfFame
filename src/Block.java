@@ -50,6 +50,10 @@ public class Block implements ActionListener{
 		}
 	}
 	
+	public boolean isBlock() {
+		return image.equals("air") ? false : true;
+	}
+	
 	public void floor() {
 		image = "grass";
 	}
