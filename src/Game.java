@@ -1,5 +1,5 @@
 /* 
- * Aaryateja
+ * Arnav Jaiswal & Aaryateja
  * 3/25/25
  * All the code
  */
@@ -193,6 +193,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 			kup = false;
 		} else if (key == KeyEvent.VK_DOWN) {
 			kdown = false;
+			pl2Block = true;
 		} else if (key == KeyEvent.VK_W) {
 			kw = false;
 		} else if (key == KeyEvent.VK_A) {
@@ -277,6 +278,15 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 				pl2X = getWidth() - player2Width / 2 / player2Size;
 			} else if (pl2X - player2Width / 2 / player2Size <= 0) {
 				pl2X = player2Width / 2 / player2Size;
+			}
+			
+			if (kdown && pl2Y <= lava && pl2Block) {
+				int row = (int) Math.floor(pl2X / 24);
+				int column = (int) Math.ceil(pl2Y / 24);
+
+				blocks[row][column].setImage("stone");
+
+				pl1Block = false;
 			}
 
 			repaint();
