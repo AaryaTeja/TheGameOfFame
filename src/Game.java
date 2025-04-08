@@ -59,7 +59,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 		blocks[43][31].floor();
 		blocks[42][31].floor();
 		blocks[41][31].floor();
-		
+
 		blocks[2][32].floor();
 		blocks[3][32].floor();
 		blocks[4][32].floor();
@@ -93,16 +93,16 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
 		pl1X = 125;
 		pl2X = 675;
-		pl1Y = pl2Y = lava;
+		pl1Y = pl2Y = 750;
 		pl1Block = pl2Block = true;
 
 		player1Width = this.player1Image.getWidth(null);
 		player1Height = this.player1Image.getHeight(null);
-		player1Size = 5;
+		player1Size = 3;
 
 		player2Width = this.player2Image.getWidth(null);
 		player2Height = this.player2Image.getHeight(null);
-		player2Size = 5;
+		player2Size = 3;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -251,6 +251,17 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 				pl1Block = false;
 			}
 
+			// Collisions:
+
+			// floor collision
+			if (blocks[(int)Math.floor(pl1X / 24)][(int)Math.floor(pl1Y / 24)].isBlock()) {
+				if (!kw) {
+					pl1YVel = 0;
+				}
+				pl1Y = Math.floorDiv((int)pl1Y, 24) * 24;
+				System.out.println( Math.floorDiv((int)pl1Y, 24));
+			}
+
 			// All of player two's code(↑←→↓)
 			if (kup && pl2Y >= lava) {
 				pl2YVel = jumpHeight;
@@ -279,7 +290,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 			} else if (pl2X - player2Width / 2 / player2Size <= 0) {
 				pl2X = player2Width / 2 / player2Size;
 			}
-			
+
 			if (kdown && pl2Y <= lava && pl2Block) {
 				int row = (int) Math.floor(pl2X / 24);
 				int column = (int) Math.ceil(pl2Y / 24);
