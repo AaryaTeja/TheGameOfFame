@@ -32,36 +32,38 @@ public class Block implements ActionListener{
 			}
 		}
 	}
-	
+
 	public int getCrack() {
 		return crack;
 	}
-	
+
 	public Image getImage() {
 		return (new Picture()).getImage(image);
 	}
-	
+
 	public void setImage(String image) {
-		this.image = image;
-		if (!image.equals("air")) {
-			crack = 20;
-			life.start();
-			
+		if (!this.image.equals("grass")) {
+			this.image = image;
+			if (!image.equals("air")) {
+				crack = 20;
+				life.start();
+
+			}
 		}
 	}
-	
+
 	public boolean isBlock() {
 		return image.equals("air") ? false : true;
 	}
-	
+
 	public void floor() {
 		image = "grass";
 	}
-	
+
 	public int getRow() {
 		return row;
 	}
-	
+
 	public int getColumn() {
 		return column;
 	}
