@@ -107,6 +107,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
 
 		g.drawImage(backgroundImage, 0, 0, backgroundImage.getWidth(null), backgroundImage.getHeight(null), null);
 
@@ -211,10 +212,18 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 			requestFocusInWindow();
 
 			double jumpHeight = -15;
-			double speed = 0.5;
+			double speed = 0.7;
+			double friction = 0.85;
 
+			boolean isPl1Floor = blocks[(int)Math.floor(pl1X / 24)][(int)Math.floor(pl1Y / 24)].isBlock() || blocks[(int)Math.floor((pl1X - (player2Height / player2Size / 2)) / 24)][(int)Math.floor(pl1Y / 24)].isBlock() || blocks[(int)Math.floor((pl1X + (player1Height / player1Size / 2)) / 24)][(int)Math.floor(pl1Y / 24)].isBlock();
+//			boolean isPl1Ceil = blocks[(int) Math.floor(pl1X / 24)][(int) Math.floor(((int) pl1Y - (player1Height / player1Size)) / 24)].isBlock() || blocks[(int) Math.floor(pl1X - (player1Height / player1Size / 2) / 24)][(int) Math.floor(((int) (pl1Y - (player1Height / player1Size))) / 24)].isBlock() || blocks[(int) Math.floor((pl1X + (player1Height / player1Size / 2)) / 24)][(int) Math.floor(((int) pl1Y - (player1Height / player1Size)) / 24)].isBlock();
+			
 			// All of player one's code(WADF)
-			if (kw && pl1Y >= lava) {
+			if (isPl1Floor) {
+				pl1YVel = 0;
+			}
+
+			if (kw && (pl1Y >= lava || isPl1Floor)) {
 				pl1YVel = jumpHeight;
 			}
 			if (ka) {
@@ -224,10 +233,20 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 				pl1XVel += speed;
 			}
 
-			pl1XVel *= 0.9;
+			pl1XVel *= friction;
 
 			pl1X += pl1XVel;
-			pl1Y += pl1YVel;
+
+
+			for (int i = 0; i < Math.abs(pl1YVel); i++) {
+				if (!blocks[(int) Math.floor(pl1X / 24)][(int) Math.floor(((int) pl1Y - (player1Height / player1Size)) / 24)].isBlock()) {
+					pl1Y += pl1YVel / Math.abs(pl1YVel);
+				} else {
+					pl1Y += 1;
+					pl1YVel = 0;
+				}
+			}
+
 
 			if (pl1Y < lava) {
 				pl1YVel += 1;
@@ -254,7 +273,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 			// Collisions:
 
 			// floor collision
-			if (blocks[(int)Math.floor(pl1X / 24)][(int)Math.floor(pl1Y / 24)].isBlock()) {
+			if (isPl1Floor) {
 				if (!kw) {
 					pl1YVel = 0;
 				}
@@ -273,7 +292,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 				pl2XVel += speed;
 			}
 
-			pl2XVel *= 0.9;
+			pl2XVel *= friction;
 
 			pl2X += pl2XVel;
 			pl2Y += pl2YVel;
