@@ -1,6 +1,4 @@
-Here's the combined code without any changes or comments added:
 
-```java
 /* 
  * Arnav Jaiswal & Aaryateja
  * 3/25/25
@@ -482,20 +480,3 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         game.setupWindow();
     }
 }
-
-class Coin {
-    private int x, y;
-    private boolean collected;
-
-    public Coin(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.collected = false;
-    }
-
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public boolean isCollected() { return collected; }
-    public void collect() { collected = true; }
-}
-```
