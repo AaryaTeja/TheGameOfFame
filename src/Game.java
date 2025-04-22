@@ -46,6 +46,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private int shop2x1, shop2y1, shop2x2, shop2y2;
     
     private boolean pl1InQuiz, pl2InQuiz;
+    
+    private int qn1, qn2;
 
     public Game() {
         picture = new Picture();
@@ -238,6 +240,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == gameTM) {
             requestFocusInWindow();
+            
+            pl1InQuiz = isPlayerInShop(1);
+            pl2InQuiz = isPlayerInShop(2);
             
             double jumpHeight = -15;
             double speed = 0.5;
@@ -452,12 +457,31 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     }
     
     private boolean isPlayerInShop(int player) {
-    	double x = (player == 1) ? pl1X : pl2X;
-    	double y = (player == 1) ? pl1Y : pl2Y;
+    	boolean pl1 = player == 1;
     	
-    	// width, height, return the right one.
+    	double x = pl1 ? pl1X : pl2X;
+    	double y = pl1 ? pl1Y : pl2Y;
+    	
+    	int width = pl1 ? player1Width : player2Width;
+    	int height = pl1 ? player1Height : player2Height;
+    	
+    	Rectangle playerRect = new Rectangle((int) (x - ((double) width / 2)), (int) (y - height), width, height);
+    	
+    	int sx = pl1 ? shop1x1 : shop2x1;
+    	int sy = pl1 ? shop1y1 : shop2y1;
+    	
+    	int swidth = pl1 ? shop1x2 - shop1x1 : shop2x2 - shop2x1;
+    	int sheight = pl1 ? shop1y2 - shop1y1 : shop2y2 - shop2y1;
+    	
+    	Rectangle shopRect = new Rectangle(sx, sy, swidth, sheight);
+    	
+    	return playerRect.intersects(shopRect);
     }
 
+    private void generateQuestion() {
+    	
+    }
+    
     public void setupWindow() {
         JFrame f = new JFrame("Game");
 
