@@ -197,6 +197,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         g.drawString("Blocks: " + player1Blocks, 50, 100);
         g.drawString("Coins: " + player2Score, getWidth() - 200, 50);
         g.drawString("Blocks: " + player2Blocks, getWidth() - 200, 100);
+        
+        generateQuestion(g, 1, 1, 2, 3, 8, 3);
     }
 
     public void keyTyped(KeyEvent e) {
@@ -470,6 +472,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	int sx = pl1 ? shop1x1 : shop2x1;
     	int sy = pl1 ? shop1y1 : shop2y1;
     	
+    	sx *= 24;
+    	sy *= 24;
+    	
     	int swidth = pl1 ? shop1x2 - shop1x1 : shop2x2 - shop2x1;
     	int sheight = pl1 ? shop1y2 - shop1y1 : shop2y2 - shop2y1;
     	
@@ -478,7 +483,27 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	return playerRect.intersects(shopRect);
     }
 
-    private void generateQuestion() {
+    private void generateQuestion(Graphics g, int player, int n1, int n2, int ans, int alt1, int alt2) {
+    	boolean pl1 = player == 1;
+    	
+    	int width = 300;
+    	int height = 200;
+    	
+    	int x = pl1 ? 50 : getWidth() - 50 - width;
+    	int y = 150;
+    	
+    	int border = 10;
+    	
+    	g.setColor(Color.darkGray);
+    	g.fillRect(x - border, y - border, width + (2*border), height + (2*border));
+    	g.setColor(Color.lightGray);
+    	g.fillRect(x, y, width, height);
+    	
+    	String question = Integer.toString(n1) + " + " + Integer.toString(n2) + " = ?";
+    	
+    	g.setColor(Color.black);
+    	g.drawString(question, x + 10, y + 30);
+    	
     	
     }
     
