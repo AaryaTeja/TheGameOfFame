@@ -508,7 +508,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	String question = Integer.toString(n1) + " + " + Integer.toString(n2) + " = ?";
     	
     	g.setColor(Color.black);
-    	g.drawString(question, x + 10, y + 30);    	
+    	g.drawString(question, x + 10, y + 30);
     }
     
     public void setupWindow() {
@@ -516,9 +516,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         gameTM = new Timer(10, this);
         gameStartTM = new Timer(500, this);
-
-        gameStartTM.start();
-
+        
         addKeyListener(this);
         f.add(this);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -534,6 +532,10 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         spawnCoins();
     }
 
+    public void startGame() {
+    	gameStartTM.start();
+    }
+    
     public static void main(String[] args) {
         Game game = new Game();
         game.setupWindow();
