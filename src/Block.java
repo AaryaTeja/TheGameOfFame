@@ -1,22 +1,31 @@
 /* Arnav Jaiswal
- * Mar 28
- * Class that stores the block properties
+ * blocks
  */
 
 import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.Timer;
 
-public class Block implements ActionListener{
-	int row, column, crack;
-	String image;
-	Timer life;
+public class Block implements ActionListener {
+	private int row, column, crack;
+	private String image;
+	private Timer life;
+	private boolean isShop;
 
+	public void makeShop() {
+		image = "shop";
+		isShop = true;
+	}
+
+	public boolean isShop() {
+		return isShop;
+	}
 
 	public Block(int row, int column) {
+		// intialize block default state
 		this.row = row;
 		this.column = column;
-		crack = 0;
+		crack = 16;
 		image = "air";
 		life = new Timer(1000, this);
 	}
@@ -25,7 +34,6 @@ public class Block implements ActionListener{
 		if (e.getSource() == life) {
 			if (crack > 0) {
 				crack--;
-				System.out.println(crack);
 			} else {
 				image = "air";
 				life.stop();
@@ -33,9 +41,7 @@ public class Block implements ActionListener{
 		}
 	}
 
-	public int getCrack() {
-		return crack;
-	}
+	public int getCrack() { return crack; }
 
 	public Image getImage() {
 		return (new Picture()).getImage(image);
@@ -45,26 +51,18 @@ public class Block implements ActionListener{
 		if (!this.image.equals("grass")) {
 			this.image = image;
 			if (!image.equals("air")) {
-				crack = 20;
+				crack = 16;
 				life.start();
-
 			}
 		}
 	}
 
 	public boolean isBlock() {
-		return image.equals("air") ? false : true;
+		return !(image.equals("air") || image.equals("shop"));
 	}
 
-	public void floor() {
-		image = "grass";
-	}
+	public void floor() { image = "grass"; }
 
-	public int getRow() {
-		return row;
-	}
-
-	public int getColumn() {
-		return column;
-	}
+	public int getRow() { return row; }
+	public int getColumn() { return column; }
 }
