@@ -46,8 +46,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private int shop2x1, shop2y1, shop2x2, shop2y2;
     
     private boolean pl1InQuiz, pl2InQuiz;
-    
-    private int qn1, qn2;
+
+    private int q1n1, q1n2, q1ans, q1alt1, q1alt2, q1correctChoice;
+    private int q2n1, q2n2, q2ans, q2alt1, q2alt2, q2correctChoice;
 
     public Game() {
         picture = new Picture();
@@ -198,7 +199,14 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         g.drawString("Coins: " + player2Score, getWidth() - 200, 50);
         g.drawString("Blocks: " + player2Blocks, getWidth() - 200, 100);
         
-        generateQuestion(g, 1, 1, 2, 3, 8, 3);
+        if (pl1InQuiz) {
+        	generateQuestion(g, 1, q1n1, q1n2, q1ans, q1alt1, q1alt2, q1correctChoice);
+        }
+        if (pl2InQuiz) {
+        	generateQuestion(g, 2, q2n1, q2n2, q2ans, q2alt1, q2alt2, q2correctChoice);
+        }
+        
+        
     }
 
     public void keyTyped(KeyEvent e) {
@@ -243,9 +251,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         if (e.getSource() == gameTM) {
             requestFocusInWindow();
             
-            pl1InQuiz = isPlayerInShop(1);
-            pl2InQuiz = isPlayerInShop(2);
-            
             double jumpHeight = -15;
             double speed = 0.5;
             double friction = 0.93;
@@ -253,6 +258,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             // Player 1 (WADF)
 
             if (!pl1InQuiz) {
+                pl1InQuiz = isPlayerInShop(1);
+                
                 boolean isPl1Floor = isBlockAt(pl1X, pl1Y) ||
                         isBlockAt(pl1X - ((double) player1Image.getWidth(null) / (2 * player1Size)), pl1Y) ||
                         isBlockAt(pl1X + ((double) player1Image.getWidth(null) / (2 * player1Size)), pl1Y);
@@ -311,11 +318,15 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                     if (!kw) pl1YVel = 0;
                     pl1Y = Math.floorDiv((int) pl1Y, 24) * 24;
                 }
+            } else {
+            	
             }
 
             // Player 2 (↑←→/)
             
             if (!pl2InQuiz) {
+                pl2InQuiz = isPlayerInShop(2);
+            	
                 boolean isPl2Floor = isBlockAt(pl2X, pl2Y) ||
                         isBlockAt(pl2X - ((double) player2Image.getWidth(null) / (2 * player2Size)), pl2Y) ||
                         isBlockAt(pl2X + ((double) player2Image.getWidth(null) / (2 * player2Size)), pl2Y);
@@ -489,14 +500,14 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	return playerRect.intersects(shopRect);
     }
 
-    private void generateQuestion(Graphics g, int player, int n1, int n2, int ans, int alt1, int alt2) {
+    private void generateQuestion(Graphics g, int player, int n1, int n2, int ans, int alt1, int alt2, int correctChoice) {
     	boolean pl1 = player == 1;
     	
-    	int width = 300;
-    	int height = 200;
+    	int width = 250;
+    	int height = 160;
     	
-    	int x = pl1 ? 50 : getWidth() - 50 - width;
-    	int y = 150;
+    	int x = pl1 ? 100 : getWidth() - 100 - width;
+    	int y = 500;
     	
     	int border = 10;
     	
@@ -509,6 +520,14 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	
     	g.setColor(Color.black);
     	g.drawString(question, x + 10, y + 30);
+
+    	String ans1 = ( pl1 ? "A: " : "←: " ) + ( correctChoice == 0 ? ans : alt1 );
+    	String ans2 = ( pl1 ? "W: " : "↑: " ) + ( correctChoice == 1 ? ans : ( correctChoice == 0 ? alt1 : alt2 ) );
+    	String ans3 = ( pl1 ? "D: " : "→: " ) + ( correctChoice == 2 ? ans : alt2 );
+
+    	g.drawString(ans1, x + 10, y + 80);
+    	g.drawString(ans2, x + 10, y + 110);
+    	g.drawString(ans3, x + 10, y + 140);
     }
     
     public void setupWindow() {
@@ -539,5 +558,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     public static void main(String[] args) {
         Game game = new Game();
         game.setupWindow();
+        
+        game.startGame();
     }
 }
