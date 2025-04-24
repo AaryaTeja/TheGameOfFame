@@ -1,15 +1,7 @@
-# The Game of Fame
-
-## Graphics Needed:
-- Player1.png
-- Player2.png
-- Floor.png
-- Zombie.png
-
 **Dimentions Of The Window:** 1440x900
 
 ## Overview
-The Game of Fame is a fast-paced, two-player competitive game where players navigate a dynamic map, overcoming obstacles and each other to claim fame points. The player with the most fame points at the end of the timer wins the game!
+The Game of Fame is a fast-paced, two-player competitive game where players navigate a map, overcoming obstacles and each other to claim fame points. The player with the most fame points at the end of the timer wins the game!
 
 ## How to Play
 - **Players:** 2
