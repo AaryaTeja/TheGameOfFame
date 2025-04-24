@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game extends JPanel implements ActionListener, KeyListener {
-    private boolean kleft, kright, kup, kdown, kw, ka, kf, kd;
+    private boolean kleft, kright, kup, kslash, kw, ka, kf, kd;
     private double pl1X, pl1XVel, pl1Y, pl1YVel, pl2X, pl2XVel, pl2Y, pl2YVel;
     private boolean pl1Block, pl2Block;
 
@@ -209,7 +209,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         if (key == KeyEvent.VK_LEFT) kleft = true;
         else if (key == KeyEvent.VK_RIGHT) kright = true;
         else if (key == KeyEvent.VK_UP) kup = true;
-        else if (key == KeyEvent.VK_DOWN) kdown = true;
+        else if (key == KeyEvent.VK_SLASH) kslash = true;
         else if (key == KeyEvent.VK_W) kw = true;
         else if (key == KeyEvent.VK_A) ka = true;
         else if (key == KeyEvent.VK_F) kf = true;
@@ -221,8 +221,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         if (key == KeyEvent.VK_LEFT) kleft = false;
         else if (key == KeyEvent.VK_RIGHT) kright = false;
         else if (key == KeyEvent.VK_UP) kup = false;
-        else if (key == KeyEvent.VK_DOWN) {
-            kdown = false;
+        else if (key == KeyEvent.VK_SLASH) {
+            kslash = false;
             pl2Block = true;
         } else if (key == KeyEvent.VK_W) kw = false;
         else if (key == KeyEvent.VK_A) ka = false;
@@ -250,7 +250,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             double speed = 0.5;
             double friction = 0.93;
             
-            // Player 1
+            // Player 1 (WADF)
 
             if (!pl1InQuiz) {
                 boolean isPl1Floor = isBlockAt(pl1X, pl1Y) ||
@@ -313,7 +313,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 }
             }
 
-            // Player 2
+            // Player 2 (↑←→/)
             
             if (!pl2InQuiz) {
                 boolean isPl2Floor = isBlockAt(pl2X, pl2Y) ||
@@ -360,7 +360,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                     pl2X = (double) player2Image.getWidth(null) / (2 * player2Size) + 48;
                 }
 
-                if (kdown && pl2Y <= lava && pl2Block && player2Blocks > 0) {
+                if (kslash && pl2Y <= lava && pl2Block && player2Blocks > 0) {
                     int row = (int) Math.floor(pl2X / 24);
                     int column = (int) Math.ceil(pl2Y / 24);
                     if (row >= 0 && row < blocks.length && column >= 0 && column < blocks[0].length && !blocks[row][column].isBlock()) {
@@ -464,8 +464,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	double x = pl1 ? pl1X : pl2X;
     	double y = pl1 ? pl1Y : pl2Y;
     	
-    	int width = pl1 ? player1Width : player2Width;
-    	int height = pl1 ? player1Height : player2Height;
+    	int width = pl1 ? player1Width / player1Size : player2Width / player2Size;
+    	int height = pl1 ? player1Height / player1Size : player2Height / player2Size;
     	
     	Rectangle playerRect = new Rectangle((int) (x - ((double) width / 2)), (int) (y - height), width, height);
     	
@@ -477,6 +477,12 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	
     	int swidth = pl1 ? shop1x2 - shop1x1 : shop2x2 - shop2x1;
     	int sheight = pl1 ? shop1y2 - shop1y1 : shop2y2 - shop2y1;
+    	
+    	swidth++;
+    	sheight++;
+    	
+    	swidth *= 24;
+    	sheight *= 24;
     	
     	Rectangle shopRect = new Rectangle(sx, sy, swidth, sheight);
     	
@@ -502,9 +508,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	String question = Integer.toString(n1) + " + " + Integer.toString(n2) + " = ?";
     	
     	g.setColor(Color.black);
-    	g.drawString(question, x + 10, y + 30);
-    	
-    	
+    	g.drawString(question, x + 10, y + 30);    	
     }
     
     public void setupWindow() {
