@@ -555,10 +555,4 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     	gameStartTM.start();
     }
     
-    public static void main(String[] args) {
-        Game game = new Game();
-        game.setupWindow();
-        
-        game.startGame();
-    }
 }
