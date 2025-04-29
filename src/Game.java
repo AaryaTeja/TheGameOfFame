@@ -8,8 +8,10 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+// TODO FINISH CHANGING PLAYER2 CONTROLS
+
 public class Game extends JPanel implements ActionListener, KeyListener {
-    private boolean kleft, kright, kup, kdown, kslash, kw, ka, kf, kd, ks;
+    private boolean kj, kl, ki, kk, ksemi, kw, ka, kf, kd, ks;
     private double pl1X, pl1XVel, pl1Y, pl1YVel, pl2X, pl2XVel, pl2Y, pl2YVel;
     private boolean pl1Block, pl2Block;
 
@@ -216,11 +218,11 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) kleft = true;
-        else if (key == KeyEvent.VK_RIGHT) kright = true;
-        else if (key == KeyEvent.VK_UP) kup = true;
-        else if (key == KeyEvent.VK_SLASH) kslash = true;
-        else if (key == KeyEvent.VK_DOWN) kdown = true;
+        if (key == KeyEvent.VK_LEFT) kj = true;
+        else if (key == KeyEvent.VK_RIGHT) kl = true;
+        else if (key == KeyEvent.VK_UP) ki = true;
+        else if (key == KeyEvent.VK_SLASH) ksemi = true;
+        else if (key == KeyEvent.VK_DOWN) kk = true;
         else if (key == KeyEvent.VK_W) kw = true;
         else if (key == KeyEvent.VK_A) ka = true;
         else if (key == KeyEvent.VK_F) kf = true;
@@ -231,20 +233,20 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_LEFT) {
-            kleft = false;
+            kj = false;
             q2canAnswer = true;
         } else if (key == KeyEvent.VK_RIGHT) {
-            kright = false;
+            kl = false;
             q2canAnswer = true;
         } else if (key == KeyEvent.VK_UP) {
-            kup = false;
+            ki = false;
             q2canAnswer = true;
         } else if (key == KeyEvent.VK_SLASH) {
-            kslash = false;
+            ksemi = false;
             pl2Block = true;
         }
         else if (key == KeyEvent.VK_DOWN) {
-            kdown = false;
+            kk = false;
         } else if (key == KeyEvent.VK_W) {
             kw = false;
             q1canAnswer = true;
@@ -381,7 +383,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             // Player 2 (↑←→↓/)
 
             if (!pl2InQuiz) {
-                pl2InQuiz = isPlayerInShop(2);
+                pl2InQuiz = isPlayerInShop(2) && ksemi;
 
                 if (pl2InQuiz) {
                     randomizeQuestion(2);
@@ -393,9 +395,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
                 if (isPl2Floor) pl2YVel = 0;
 
-                if (kup && (pl2Y >= lava || isPl2Floor)) pl2YVel = jumpHeight;
-                if (kleft) pl2XVel -= speed;
-                if (kright) pl2XVel += speed;
+                if (ki && (pl2Y >= lava || isPl2Floor)) pl2YVel = jumpHeight;
+                if (kj) pl2XVel -= speed;
+                if (kl) pl2XVel += speed;
 
                 pl2XVel *= friction;
 
@@ -431,7 +433,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                     pl2X = (double) player2Image.getWidth(null) / (2 * player2Size) + 48;
                 }
 
-                if (kslash && pl2Y <= lava && pl2Block && player2Blocks > 0) {
+                if (ksemi && pl2Y <= lava && pl2Block && player2Blocks > 0) {
                     int row = (int) Math.floor(pl2X / 24);
                     int column = (int) Math.ceil(pl2Y / 24);
                     if (row >= 0 && row < blocks.length && column >= 0 && column < blocks[0].length && !blocks[row][column].isBlock()) {
@@ -442,26 +444,26 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 }
 
                 if (isPl2Floor) {
-                    if (!kup) pl2YVel = 0;
+                    if (!ki) pl2YVel = 0;
                     pl2Y = Math.floorDiv((int) pl2Y, 24) * 24;
                 }
             } else {
                 if (player2Coins == 0) {
                     pl2InQuiz = false;
                 } else {
-                    if (!kdown) { // doesn't want to exit
+                    if (!kk) { // doesn't want to exit
 
-                        if (kleft && q2correctChoice == 0) {
+                        if (kj && q2correctChoice == 0) {
                             player2Blocks += (player2Coins >= 5 ? 15 : 3 * player2Coins);
                             player2Coins -= Math.min(player2Coins, 5);
                             q2canAnswer = false;
                             randomizeQuestion(2);
-                        } else if (kup && q2correctChoice == 1) {
+                        } else if (ki && q2correctChoice == 1) {
                             player2Blocks += (player2Coins >= 5 ? 15 : 3 * player2Coins);
                             player2Coins -= Math.min(player2Coins, 5);
                             q2canAnswer = false;
                             randomizeQuestion(2);
-                        } else if (kright && q2correctChoice == 2) {
+                        } else if (kl && q2correctChoice == 2) {
                             player2Blocks += (player2Coins >= 5 ? 15 : 3 * player2Coins);
                             player2Coins -= Math.min(player2Coins, 5);
                             q2canAnswer = false;
