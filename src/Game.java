@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+// TODO FINISH CHANGING PLAYER2 CONTROLS
+
 public class Game extends JPanel implements ActionListener, KeyListener {
     private boolean kj, kl, ki, kk, ksemi, kw, ka, kf, kd, ks;
     private double pl1X, pl1XVel, pl1Y, pl1YVel, pl2X, pl2XVel, pl2Y, pl2YVel;
@@ -54,6 +56,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private int player1Score = 0;
     private int player2Score = 0;
     private boolean gameOver = false;
+    
+    private GameOverScreen gameOverScreen;
+    private JLayeredPane layeredPane; // To overlay the popup
 
     public Game() {
         picture = new Picture();
@@ -79,6 +84,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 blocks[x][i].floor();
                 blocks[blocks.length - 1 - x][i].floor();
             }
+            
         }
 
         random = new Random();
@@ -131,6 +137,20 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         pl1InQuiz = pl2InQuiz = false;
         q1canAnswer = q2canAnswer = true;
+        
+     // Set up layered pane for popup
+        setLayout(new BorderLayout());
+        layeredPane = new JLayeredPane();
+        add(layeredPane, BorderLayout.CENTER);
+        
+        // Initialize gameOverScreen (initially hidden)
+        gameOverScreen = new GameOverScreen(this, "");
+        gameOverScreen.setBounds(0, 0, getWidth(), getHeight());
+        gameOverScreen.setVisible(false);
+        layeredPane.add(gameOverScreen, JLayeredPane.PALETTE_LAYER);
+        
+        adminPanel = new AdminPanel(this);
+        adminPanel.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);// Show above everything
     }
 
     public void paintComponent(Graphics g) {
@@ -240,6 +260,16 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         else if (key == KeyEvent.VK_F) kf = true;
         else if (key == KeyEvent.VK_D) kd = true;
         else if (key == KeyEvent.VK_S) ks = true;
+        
+        if ((e.getKeyCode() == KeyEvent.VK_1) && 
+                ((e.getModifiersEx() & KeyEvent.META_DOWN_MASK) != 0 || 
+                 (e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+                if (adminPanel == null) {
+                    adminPanel = new AdminPanel(this);
+                }
+                adminPanelVisible = !adminPanelVisible;
+                adminPanel.setVisible(adminPanelVisible);
+            }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -562,40 +592,110 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                     player1Score += 1; // Increment score
                     coins.remove(i);
                     spawnCoins();
-                    checkWinCondition(); // Check if player won
+                    checkWinCondition();  // Check if player won
                 } else if (player2Rect.intersects(coinRect)) {
                     coin.collect();
                     player2Coins += 1;
                     player2Score += 1; // Increment score
                     coins.remove(i);
                     spawnCoins();
-                    checkWinCondition(); // Check if player won
+                    checkWinCondition();  // Check if player won
                 }
             }
         }
     }
     
-    private void checkWinCondition() {
-        if (player1Score >= 20) {
-            gameOver = true;
-            JOptionPane.showMessageDialog(this, "Player 1 Wins! (Blue)", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-            resetGame();
-        } else if (player2Score >= 20) {
-            gameOver = true;
-            JOptionPane.showMessageDialog(this, "Player 2 Wins! (Red)", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-            resetGame();
+ // Add these to your Game class
+    private AdminPanel adminPanel;
+    private boolean adminPanelVisible = false;
+
+    // Add these methods to Game class
+    public void addPlayerScore(int player, int amount) {
+        if (player == 1) {
+            player1Score = Math.max(0, player1Score + amount);
+        } else {
+            player2Score = Math.max(0, player2Score + amount);
+        }
+        checkWinCondition();
+    }
+
+    public void forceEndGame() {
+        if (player1Score > player2Score) {
+            checkWinCondition("PLAYER 1 (BLUE)");
+        } else if (player2Score > player1Score) {
+            checkWinCondition("PLAYER 2 (RED)");
+        } else {
+            checkWinCondition("DRAW!");
         }
     }
 
-    private void resetGame() {
+    public void teleportPlayers(String location) {
+        if (location.equals("center")) {
+            pl1X = getWidth() / 4;
+            pl2X = getWidth() * 3 / 4;
+            pl1Y = pl2Y = 500;
+        } else if (location.equals("shops")) {
+            pl1X = shop1x1 * 24 + 12;
+            pl1Y = shop1y1 * 24 + 12;
+            pl2X = shop2x1 * 24 + 12;
+            pl2Y = shop2y1 * 24 + 12;
+        }
+    }
+
+    public void spawnItem(String type) {
+        if (type.equals("coin")) {
+            int x = random.nextInt(getWidth() - 100) + 50;
+            int y = random.nextInt(lava - 300) + 100;
+            coins.add(new Coin(x, y));
+        } else if (type.equals("block")) {
+            int x = random.nextInt(blocks.length);
+            int y = random.nextInt(blocks[0].length - 10) + 5;
+            if (!blocks[x][y].isBlock()) {
+                blocks[x][y].setImage("stone");
+            }
+        }
+    }
+
+    // Modify checkWinCondition to accept manual winner
+ // Modified version that handles both automatic and manual winner declaration
+    private void checkWinCondition() {
+        checkWinCondition(null); // Call the new version with null for automatic check
+    }
+
+    private void checkWinCondition(String manualWinner) {
+        if (manualWinner != null) {
+            // Force the specified winner
+            endGameWithWinner(manualWinner);
+        } else {
+            // Original automatic scoring logic
+            if (player1Score >= 20) {
+                endGameWithWinner("PLAYER 1 (BLUE)");
+            } else if (player2Score >= 20) {
+                endGameWithWinner("PLAYER 2 (RED)");
+            }
+        }
+    }
+
+    private void endGameWithWinner(String winner) {
+        gameOver = true;
+        gameOverScreen = new GameOverScreen(this, winner);
+        gameOverScreen.setBounds(0, 0, getWidth(), getHeight());
+        layeredPane.add(gameOverScreen, JLayeredPane.PALETTE_LAYER);
+        gameOverScreen.setVisible(true);
+        gameTM.stop(); // Stop the game timer
+    }
+    
+
+    public void resetGame() {
         player1Score = 0;
         player2Score = 0;
         gameOver = false;
         respawnPlayer1();
         respawnPlayer2();
         spawnCoins();
+        gameOverScreen.setVisible(false); // Hide popup
+        gameTM.start(); // Restart game timer
     }
-
     private boolean isPlayerInShop(int player) {
         boolean pl1 = player == 1;
 
@@ -693,7 +793,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     }
 
     public void stopGame() {
-        gameTM.stop();
+    	gameTM.stop();
+        
     }
 
 }
