@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-// TODO FINISH CHANGING PLAYER2 CONTROLS
-
 public class Game extends JPanel implements ActionListener, KeyListener {
     private boolean kj, kl, ki, kk, ksemi, kw, ka, kf, kd, ks;
     private double pl1X, pl1XVel, pl1Y, pl1YVel, pl2X, pl2XVel, pl2Y, pl2YVel;
