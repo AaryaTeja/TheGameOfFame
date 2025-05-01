@@ -52,6 +52,10 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private int q1n1, q1n2, q1ans, q1alt1, q1alt2, q1correctChoice;
     private int q2n1, q2n2, q2ans, q2alt1, q2alt2, q2correctChoice;
     boolean q1canAnswer, q2canAnswer;
+    
+    private int player1Score = 0;
+    private int player2Score = 0;
+    private boolean gameOver = false;
 
     public Game() {
         picture = new Picture();
@@ -133,8 +137,18 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        
         g.drawImage(backgroundImage, 0, 0, backgroundImage.getWidth(null), backgroundImage.getHeight(null), null);
+        // Draw the score (Player 1 : Player 2)
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.setColor(Color.BLUE);
+        g.drawString(String.valueOf(player1Score), getWidth() / 2 - 60, 50);
+        g.setColor(Color.WHITE);
+        g.drawString(" : ", getWidth() / 2 - 15, 50);
+        g.setColor(Color.RED);
+        g.drawString(String.valueOf(player2Score), getWidth() / 2 + 30, 50);
+
+      
 
         for (Coin coin : coins) {
             if (coin.isNotCollected()) {
@@ -273,7 +287,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == gameTM) {
+    	if (gameOver) return; 
+    	if (e.getSource() == gameTM) {
             requestFocusInWindow();
 
             double jumpHeight = -15;
@@ -546,16 +561,41 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 if (player1Rect.intersects(coinRect)) {
                     coin.collect();
                     player1Coins += 1;
+                    player1Score += 1; // Increment score
                     coins.remove(i);
                     spawnCoins();
+                    checkWinCondition(); // Check if player won
                 } else if (player2Rect.intersects(coinRect)) {
                     coin.collect();
                     player2Coins += 1;
+                    player2Score += 1; // Increment score
                     coins.remove(i);
                     spawnCoins();
+                    checkWinCondition(); // Check if player won
                 }
             }
         }
+    }
+    
+    private void checkWinCondition() {
+        if (player1Score >= 20) {
+            gameOver = true;
+            JOptionPane.showMessageDialog(this, "Player 1 Wins! (Blue)", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+            resetGame();
+        } else if (player2Score >= 20) {
+            gameOver = true;
+            JOptionPane.showMessageDialog(this, "Player 2 Wins! (Red)", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+            resetGame();
+        }
+    }
+
+    private void resetGame() {
+        player1Score = 0;
+        player2Score = 0;
+        gameOver = false;
+        respawnPlayer1();
+        respawnPlayer2();
+        spawnCoins();
     }
 
     private boolean isPlayerInShop(int player) {
