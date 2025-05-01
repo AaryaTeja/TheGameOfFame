@@ -7,74 +7,69 @@ public class Instructions extends JPanel implements ActionListener {
     Layout layout;
     JButton backButton;
     JTextArea instructionsText;
+    JScrollPane scrollPane;
 
     public Instructions(Layout layout) {
         this.layout = layout;
         setLayout(new BorderLayout());
-        
-    
+
+        // Set up the instructions text area
         instructionsText = new JTextArea();
         instructionsText.setEditable(false);
         instructionsText.setLineWrap(true);
         instructionsText.setWrapStyleWord(true);
         instructionsText.setFont(new Font("Arial", Font.PLAIN, 16));
         instructionsText.setMargin(new Insets(20, 20, 20, 20));
-        
-   
+
+        // Nicely formatted text block
         String instructions = """
-        		🎯 Objective: 
-        		
-        		Collect coins to earn currency.Use coins in shops to buy blocks.
-        		Build platforms to navigate the map and avoid falling into lava.
-        		Outlast your opponent by being the last player standing!
-        		🎮 Controls:
+            🎯 Objective:
+            Collect coins as currency. Use coins in the shop to buy blocks.
+            Build platforms to navigate the map and avoid falling into lava.
+            Get 50 coins to win the game!
 
-        		Player 1 (Left Side - W/A/S/D/F Controls)
+            🎮 Controls:
 
-        		Move Left: A
-        		Move Right: D
-        		Jump: W
-        		Place Block: F (Costs 1 block from inventory)
-        		Shop Interaction: Enter the shop area and press F to access the quiz.
-        		Player 2 (Right Side - I/J/K/L/; Controls)
+            Player 1 (WASD + F):
+              - Move Left/Right: A / D
+              - Jump: W
+              - Place Block: F (Costs 1 block from inventory)
+              - Shop: Enter the shop and press F
 
-        		Move Left: J
-        		Move Right: L
-        		Jump: I
-        		Place Block: ; (SEMICOLON key, costs 1 block)
-        		Shop Interaction: Enter the shop area and press ; to access the quiz.
-        		🛒 Shops (Quiz Mechanics):
+            Player 2 (IJKL + ';'):
+              - Move Left/Right: J / L
+              - Jump: I
+              - Place Block: ';' (semicolon key, costs 1 block)
+              - Shop: Enter the shop and press ';'
 
-				When inside a shop (marked area), press the block key (F or ;) to start a math quiz.
-				Answer multiplication questions correctly to convert coins into blocks:
-				Player 1: Use A, W, or D to select an answer.
-				Player 2: Use J, I, or L to select an answer.
-				Correct answer: Gain blocks (3 blocks per coin, max 15 blocks per transaction).
-				Exit quiz: Press S (Player 1) or K (Player 2).
-				⚡ Gameplay Tips:
-				
-				Avoid lava at the bottom—falling respawns you but resets coins/blocks!
-				Build strategically to create paths or trap your opponent.
-				Prioritize coins to buy more blocks.
-				Use shops wisely—quizzes are the only way to convert coins to blocks.
+            🛒 Shops (Quiz Mechanics):
+              - Stand in the shop area and press your block key (F or ';') to start a quiz
+              - Answer multiplication questions to convert coins into blocks
+              - Each correct answer gives 3 blocks per coin (max 15 blocks per quiz)
+              - Exit quiz: Press S (Player 1) or K (Player 2)
+
+            ⚡ Tips:
+              - Avoid falling into lava — falling resets your coins and blocks!
+              - Build platforms to trap or outplay your opponent
+              - Use quizzes smartly to gain the most blocks
             """;
+
         instructionsText.setText(instructions);
-        
-        
-        JScrollPane scrollPane = new JScrollPane(instructionsText);
+
+        scrollPane = new JScrollPane(instructionsText);
         add(scrollPane, BorderLayout.CENTER);
-        
-      
-        backButton = new JButton("Back to main menu");
+
+        // Set up back button
+        backButton = new JButton("Back to Main Menu");
         backButton.setFont(new Font("Arial", Font.BOLD, 14));
         backButton.addActionListener(this);
-        
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-  
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             CardLayout cl = (CardLayout) layout.cards.getLayout();
