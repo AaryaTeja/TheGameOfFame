@@ -694,6 +694,15 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         respawnPlayer1();
         respawnPlayer2();
         spawnCoins();
+        
+        for (Block[] row : blocks) {
+        	for (Block block : row) {
+        		if (!block.isFloor()) {
+        			block.setImage("air");
+        		}
+        	}
+        }
+        
         gameOverScreen.setVisible(false); // Hide popup
         gameTM.start(); // Restart game timer
     }
