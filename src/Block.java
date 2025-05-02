@@ -4,6 +4,7 @@
 
 import java.awt.Image;
 import java.awt.event.*;
+import java.util.Objects;
 import javax.swing.Timer;
 
 public class Block implements ActionListener {
@@ -62,7 +63,7 @@ public class Block implements ActionListener {
 	}
 
 	public void floor() { image = "grass"; }
-	public boolean isFloor() { return image == "grass"; }
+	public boolean isFloor() { return Objects.equals(image, "grass"); }
 	public int getRow() { return row; }
 	public int getColumn() { return column; }
 }
