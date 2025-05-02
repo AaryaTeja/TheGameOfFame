@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-// TODO FINISH CHANGING PLAYER2 CONTROLS
-
 public class Game extends JPanel implements ActionListener, KeyListener {
     private boolean kj, kl, ki, kk, ksemi, kw, ka, kf, kd, ks;
     private double pl1X, pl1XVel, pl1Y, pl1YVel, pl2X, pl2XVel, pl2Y, pl2YVel;
@@ -148,9 +146,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         gameOverScreen.setBounds(0, 0, getWidth(), getHeight());
         gameOverScreen.setVisible(false);
         layeredPane.add(gameOverScreen, JLayeredPane.PALETTE_LAYER);
-
-        adminPanel = new AdminPanel(this);
-        adminPanel.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);// Show above everything
     }
 
     public void paintComponent(Graphics g) {
@@ -260,16 +255,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         else if (key == KeyEvent.VK_F) kf = true;
         else if (key == KeyEvent.VK_D) kd = true;
         else if (key == KeyEvent.VK_S) ks = true;
-
-        if ((e.getKeyCode() == KeyEvent.VK_1) &&
-                ((e.getModifiersEx() & KeyEvent.META_DOWN_MASK) != 0 ||
-                        (e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
-            if (adminPanel == null) {
-                adminPanel = new AdminPanel(this);
-            }
-            adminPanelVisible = !adminPanelVisible;
-            adminPanel.setVisible(adminPanelVisible);
-        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -606,10 +591,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             }
         }
     }
-
-    // Add these to your Game class
-    private AdminPanel adminPanel;
-    private boolean adminPanelVisible = false;
 
     // Add these methods to Game class
     public void addPlayerScore(int player, int amount) {
