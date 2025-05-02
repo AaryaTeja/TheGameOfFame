@@ -62,7 +62,7 @@ public class Block implements ActionListener {
 	}
 
 	public void floor() { image = "grass"; }
-
+	public boolean isFloor() { return image == "grass"; }
 	public int getRow() { return row; }
 	public int getColumn() { return column; }
 }
