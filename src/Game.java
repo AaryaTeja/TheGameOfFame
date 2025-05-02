@@ -154,12 +154,17 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         g.drawImage(backgroundImage, 0, 0, backgroundImage.getWidth(null), backgroundImage.getHeight(null), null);
         // Draw the score (Player 1 : Player 2)
         g.setFont(new Font("Arial", Font.BOLD, 36));
-        g.setColor(Color.BLUE);
-        g.drawString(String.valueOf(player1Score), getWidth() / 2 - 60, 50);
+
         g.setColor(Color.WHITE);
-        g.drawString(" : ", getWidth() / 2 - 15, 50);
+        g.drawString("Fame Points", getWidth() / 2 - 110, 50);
+
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.setColor(Color.BLUE);
+        g.drawString(String.valueOf(player1Score), getWidth() / 2 - 50, 90);
+        g.setColor(Color.WHITE);
+        g.drawString(" : ", getWidth() / 2 - 15, 90);
         g.setColor(Color.RED);
-        g.drawString(String.valueOf(player2Score), getWidth() / 2 + 30, 50);
+        g.drawString(String.valueOf(player2Score), getWidth() / 2 + 30, 90);
 
 
         for (Coin coin : coins) {
