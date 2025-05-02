@@ -52,11 +52,11 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private int q1n1, q1n2, q1ans, q1alt1, q1alt2, q1correctChoice;
     private int q2n1, q2n2, q2ans, q2alt1, q2alt2, q2correctChoice;
     boolean q1canAnswer, q2canAnswer;
-    
+
     private int player1Score = 0;
     private int player2Score = 0;
     private boolean gameOver = false;
-    
+
     private GameOverScreen gameOverScreen;
     private JLayeredPane layeredPane; // To overlay the popup
 
@@ -84,7 +84,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 blocks[x][i].floor();
                 blocks[blocks.length - 1 - x][i].floor();
             }
-            
+
         }
 
         random = new Random();
@@ -137,25 +137,25 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         pl1InQuiz = pl2InQuiz = false;
         q1canAnswer = q2canAnswer = true;
-        
-     // Set up layered pane for popup
+
+        // Set up layered pane for popup
         setLayout(new BorderLayout());
         layeredPane = new JLayeredPane();
         add(layeredPane, BorderLayout.CENTER);
-        
+
         // Initialize gameOverScreen (initially hidden)
         gameOverScreen = new GameOverScreen(this, "");
         gameOverScreen.setBounds(0, 0, getWidth(), getHeight());
         gameOverScreen.setVisible(false);
         layeredPane.add(gameOverScreen, JLayeredPane.PALETTE_LAYER);
-        
+
         adminPanel = new AdminPanel(this);
         adminPanel.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);// Show above everything
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
         g.drawImage(backgroundImage, 0, 0, backgroundImage.getWidth(null), backgroundImage.getHeight(null), null);
         // Draw the score (Player 1 : Player 2)
         g.setFont(new Font("Arial", Font.BOLD, 36));
@@ -166,7 +166,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         g.setColor(Color.RED);
         g.drawString(String.valueOf(player2Score), getWidth() / 2 + 30, 50);
 
-      
+
 
         for (Coin coin : coins) {
             if (coin.isNotCollected()) {
@@ -260,16 +260,16 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         else if (key == KeyEvent.VK_F) kf = true;
         else if (key == KeyEvent.VK_D) kd = true;
         else if (key == KeyEvent.VK_S) ks = true;
-        
-        if ((e.getKeyCode() == KeyEvent.VK_1) && 
-                ((e.getModifiersEx() & KeyEvent.META_DOWN_MASK) != 0 || 
-                 (e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
-                if (adminPanel == null) {
-                    adminPanel = new AdminPanel(this);
-                }
-                adminPanelVisible = !adminPanelVisible;
-                adminPanel.setVisible(adminPanelVisible);
+
+        if ((e.getKeyCode() == KeyEvent.VK_1) &&
+                ((e.getModifiersEx() & KeyEvent.META_DOWN_MASK) != 0 ||
+                        (e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+            if (adminPanel == null) {
+                adminPanel = new AdminPanel(this);
             }
+            adminPanelVisible = !adminPanelVisible;
+            adminPanel.setVisible(adminPanelVisible);
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -315,8 +315,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-    	if (gameOver) return; 
-    	if (e.getSource() == gameTM) {
+        if (gameOver) return;
+        if (e.getSource() == gameTM) {
             requestFocusInWindow();
 
             double jumpHeight = -15;
@@ -542,7 +542,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         pl1YVel = 0;
         player1Coins = 0;
         player1Blocks = 10;
-        player1Score *= 0.5;
+        player1Score = (int) (player1Score * 0.5);
     }
 
     private void respawnPlayer2() {
@@ -552,7 +552,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         pl2YVel = 0;
         player2Coins = 0;
         player2Blocks = 10;
-        player2Score *= 0.5;
+        player2Score = (int) (player2Score * 0.5);
     }
 
     private void spawnCoins() {
@@ -606,8 +606,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             }
         }
     }
-    
- // Add these to your Game class
+
+    // Add these to your Game class
     private AdminPanel adminPanel;
     private boolean adminPanelVisible = false;
 
@@ -633,8 +633,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     public void teleportPlayers(String location) {
         if (location.equals("center")) {
-            pl1X = getWidth() / 4;
-            pl2X = getWidth() * 3 / 4;
+            pl1X = (double) getWidth() / 4;
+            pl2X = (double) (getWidth() * 3) / 4;
             pl1Y = pl2Y = 500;
         } else if (location.equals("shops")) {
             pl1X = shop1x1 * 24 + 12;
@@ -659,7 +659,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     }
 
     // Modify checkWinCondition to accept manual winner
- // Modified version that handles both automatic and manual winner declaration
+    // Modified version that handles both automatic and manual winner declaration
     private void checkWinCondition() {
         checkWinCondition(null); // Call the new version with null for automatic check
     }
@@ -686,7 +686,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         gameOverScreen.setVisible(true);
         gameTM.stop(); // Stop the game timer
     }
-    
+
     public void resetGame() {
         player1Score = 0;
         player2Score = 0;
@@ -694,19 +694,19 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         respawnPlayer1();
         respawnPlayer2();
         spawnCoins();
-        
+
         for (Block[] row : blocks) {
-        	for (Block block : row) {
-        		if (!block.isFloor()) {
-        			block.setImage("air");
-        		}
-        	}
+            for (Block block : row) {
+                if (!block.isFloor()) {
+                    block.setImage("air");
+                }
+            }
         }
-        
+
         gameOverScreen.setVisible(false); // Hide popup
         gameTM.start(); // Restart game timer
     }
-    
+
     private boolean isPlayerInShop(int player) {
         boolean pl1 = player == 1;
 
@@ -804,8 +804,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     }
 
     public void stopGame() {
-    	gameTM.stop();
-        
+        gameTM.stop();
+
     }
 
 }
