@@ -321,7 +321,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
             double jumpHeight = -15;
             double speed = 0.5;
-            double friction = 0.93;
+            double friction = 0.95;
 
             // Player 1 (WADFS)
 
