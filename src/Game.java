@@ -542,6 +542,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         pl1YVel = 0;
         player1Coins = 0;
         player1Blocks = 10;
+        player1Score *= 0.5;
     }
 
     private void respawnPlayer2() {
@@ -551,6 +552,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         pl2YVel = 0;
         player2Coins = 0;
         player2Blocks = 10;
+        player2Score *= 0.5;
     }
 
     private void spawnCoins() {
@@ -685,7 +687,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         gameTM.stop(); // Stop the game timer
     }
     
-
     public void resetGame() {
         player1Score = 0;
         player2Score = 0;
@@ -696,6 +697,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         gameOverScreen.setVisible(false); // Hide popup
         gameTM.start(); // Restart game timer
     }
+    
     private boolean isPlayerInShop(int player) {
         boolean pl1 = player == 1;
 
