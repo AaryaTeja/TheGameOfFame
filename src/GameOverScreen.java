@@ -4,12 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameOverScreen extends JPanel {
-    private JButton playAgainButton;
-    private JButton endButton;
-    private Game game; // Reference to the main game
 
     public GameOverScreen(Game game, String winner) {
-        this.game = game;
+        // Reference to the main game
         setLayout(new BorderLayout());
         setBackground(new Color(0, 0, 0, 200)); // Semi-transparent black
 
@@ -21,8 +18,8 @@ public class GameOverScreen extends JPanel {
 
         // Button panel
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        playAgainButton = new JButton("Play Again");
-        endButton = new JButton("End");
+        JButton playAgainButton = new JButton("Play Again");
+        JButton endButton = new JButton("End");
 
         // Style buttons
         playAgainButton.setFont(new Font("Arial", Font.BOLD, 24));
