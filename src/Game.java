@@ -549,6 +549,10 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             checkCoinCollection();
         } else if (e.getSource() == crateTM) {
             crates.add(new Crate(pipeX));
+            crateTM.stop();
+            crateTM.setDelay(random.nextInt(30000) + 10000);
+            crateTM.start();
+
 //            crates.add(new Crate((int) pl1X)); uncomment for crazy mode
 //            crates.add(new Crate((int) pl2X));
         } else if (e.getSource() == gameStartTM) {
@@ -824,7 +828,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     public void setupWindow() {
         gameTM = new Timer(10, this);
         gameStartTM = new Timer(500, this);
-        crateTM = new Timer(20000, this);
+        crateTM = new Timer(random.nextInt(30000) + 10000, this);
 
         addKeyListener(this);
     }
